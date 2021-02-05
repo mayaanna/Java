@@ -1,0 +1,155 @@
+import java.util.Scanner;
+public class ChuckALuck {
+
+	public static final int TRIPLE = 1;
+	public static final int FIELD = 2;
+	public static final int HIGH = 3;
+	public static final int LOW = 4;
+	public static final int FIELD_CONDITION1 = 8;
+	public static final int FIELD_CONDITION2 = 12;
+	public static final int HIGH_CONDITION = 10;
+	public static final int LOW_CONDITION = 11;
+	public static final int HOUSE_WIN1 = 3;
+	public static final int HOUSE_WIN2 = 18;
+
+
+	public static void ResolveBet (int betType, double money)
+	{
+
+		boolean over = false;
+		while (!over)
+		{
+			System.out.println("How much money would you like to bet?");
+			Scanner input1 = new Scanner(System.in);
+			double amountToBet = input1.nextDouble();
+
+			if (amountToBet <= money)
+			{
+				money = money - amountToBet;
+				Dice d1 = new Dice();
+				Dice d2 = new Dice();
+				Dice d3 = new Dice();
+
+				int roll1 = d1.roll();
+				int roll2 = d2.roll();
+				int roll3 = d3.roll();
+
+				int rollTotal = roll1 + roll2 + roll3;
+				System.out.println(" You rolled a " + roll1 + "," +roll2 + "," + roll3 + ".");
+				System.out.println(" For a total of " + rollTotal);
+
+				{
+					if ( roll1 == roll2 && roll2 == roll3  && rollTotal != HOUSE_WIN1 && rollTotal != HOUSE_WIN2 
+							&& betType == TRIPLE)
+					{
+						System.out.println("Congrats! You won the round.");
+						money = money + (amountToBet * 30) + amountToBet;
+						System.out.println("The amount of money left is " + money);
+
+					}
+
+					else if ( rollTotal < FIELD_CONDITION1 || rollTotal > FIELD_CONDITION2  && betType == FIELD)
+					{
+						System.out.println("Congrats! You won the round.");
+						money = money + (amountToBet*2);
+						System.out.println("The amount of money left is " + money);
+					}
+					else if ( rollTotal > HIGH_CONDITION && rollTotal != HOUSE_WIN2 && betType == HIGH )
+					{
+						System.out.println("Congrats! You won the round.");
+						money = money + (amountToBet*2);
+						System.out.println("The amount of money left is " + money);
+					}
+					else if ( rollTotal < LOW_CONDITION && rollTotal !=HOUSE_WIN1 && betType == LOW )
+					{
+						System.out.println("Congrats! You won the round.");
+						money = money + (amountToBet*2);
+						System.out.println("The amount of money left is " + money);
+					}
+					else if ( (rollTotal == HOUSE_WIN1 || rollTotal == HOUSE_WIN2 && betType == TRIPLE))
+					{
+						System.out.print("The house wins the round");
+						System.out.println("The amount of money left is " + money);
+					}
+					else 
+					{
+						System.out.println(" Sorry, you lost the round");
+						System.out.println("The amount of money left is " + money);
+
+					}
+				}
+			}
+			else 
+			{
+				System.out.println("Not enough money in wallet to place the bet");
+
+			}
+			
+			
+			
+		}
+
+
+
+	}
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter the amount of cash you have:");
+		double money = input.nextDouble();
+		System.out.println("The amount of money in the wallet is " + money);
+
+
+		boolean finished = false;
+		while (!finished)
+		{
+
+			System.out.println("If you want to place a triple bet enter '1'." );
+			System.out.println("If you want to place a field bet enter '2'." );
+			System.out.println("If you want to place a high bet enter '3'." );
+			System.out.println("If you want to place a low bet enter '4'." );
+			System.out.println("Or enter 'quit':");
+
+			String userInput = input.next();
+			if (userInput.equals("quit"))
+			{
+				System.out.println("Goodbye");
+				input.close();
+				finished = true;
+			}
+			else
+			{
+				Scanner input2 = new Scanner(userInput);
+
+				if (input2.hasNextInt())
+				{
+					int betType = input2.nextInt();
+					if (betType <= 4 && betType >=1)
+
+
+					{
+						ResolveBet(betType, money);
+					}
+
+
+				}
+				else
+
+				{
+					System.out.println("Input not valid");
+
+				}
+
+
+
+
+			}
+
+		}
+
+
+	}
+}
